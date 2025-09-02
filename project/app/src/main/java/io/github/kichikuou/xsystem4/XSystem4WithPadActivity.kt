@@ -3,6 +3,7 @@ package io.github.kichikuou.xsystem4 // あなたのパッケージ名に合わ�
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -77,48 +78,56 @@ class XSystem4WithPadActivity : SDLActivity() { // SDLActivityを継承
                     )
 
                     MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> Log.d(
-                        "XSystem4Activity",
-                        "nativeSendJoystickEvent: x=0f, y=0f, pressed=false"
+                        "XSystem4Activity", "nativeSendJoystickEvent: x=0f, y=0f, pressed=false"
                     ) // リセット
                 }
                 true // イベントを消費
             }
 
             // 十字キーボタン
-            ovView.findViewById<Button>(R.id.dpad_up).setOnClickListener {
-                Log.d("XSystem4Activity", "nativeSendDpadEvent: up_pressed")
+            ovView.findViewById<Button>(R.id.dpad_up).setOnTouchListener { _, event ->
+                handleTouchEvent(event, KeyEvent.KEYCODE_DPAD_UP)
+                true
             }
-            // 他の十字キーボタンも同様に設定 (DOWN, MOVE, UP イベントを考慮する場合は OnTouchListener を使う)
-            // 簡単のためここでは onClickListener を使用
-            ovView.findViewById<Button>(R.id.dpad_down).setOnClickListener {
-                Log.d("XSystem4Activity", "nativeSendDpadEvent: down_pressed")
+            ovView.findViewById<Button>(R.id.dpad_down).setOnTouchListener { _, event ->
+                handleTouchEvent(event, KeyEvent.KEYCODE_DPAD_DOWN)
+                true
             }
-            ovView.findViewById<Button>(R.id.dpad_left).setOnClickListener {
-                Log.d("XSystem4Activity", "nativeSendDpadEvent: left_pressed")
+            ovView.findViewById<Button>(R.id.dpad_left).setOnTouchListener { _, event ->
+                handleTouchEvent(event, KeyEvent.KEYCODE_DPAD_LEFT)
+                true
             }
-            ovView.findViewById<Button>(R.id.dpad_right).setOnClickListener {
-                Log.d("XSystem4Activity", "nativeSendDpadEvent: right_pressed")
+            ovView.findViewById<Button>(R.id.dpad_right).setOnTouchListener { _, event ->
+                handleTouchEvent(event, KeyEvent.KEYCODE_DPAD_RIGHT)
+                true
             }
-
 
             // --- 右側のコントロール ---
-            ovView.findViewById<Button>(R.id.button_action_a).setOnClickListener {
-                Log.d("XSystem4Activity", "nativeSendButtonEvent: A_pressed")
+            ovView.findViewById<Button>(R.id.button_action_a).setOnTouchListener { _, event ->
+                handleTouchEvent(event, KeyEvent.KEYCODE_SPACE)
+                true
             }
-            ovView.findViewById<Button>(R.id.button_action_b).setOnClickListener {
-                Log.d("XSystem4Activity", "nativeSendButtonEvent: B_pressed")
+            ovView.findViewById<Button>(R.id.button_action_b).setOnTouchListener { _, event ->
+                handleTouchEvent(event, KeyEvent.KEYCODE_ENTER)
+                true
             }
-            ovView.findViewById<Button>(R.id.button_menu).setOnClickListener {
-                Log.d("XSystem4Activity", "nativeSendButtonEvent: Menu_pressed")
-                // 例: メニューボタンが押されたらオーバーレイを非表示にする
-                // toggleOverlayVisibility()
+            ovView.findViewById<Button>(R.id.button_menu).setOnTouchListener { _, event ->
+                if (event.action == MotionEvent.ACTION_UP) {
+                    Log.d("XSystem4Activity", "nativeSendButtonEvent: Menu_pressed")
+                    // 例: メニューボタンが押されたらオーバーレイを非表示にする
+                    // toggleOverlayVisibility()
+                }
+                true
+            }
+            ovView.findViewById<Button>(R.id.button_ctrl).setOnTouchListener { _, event ->
+                handleTouchEvent(event, KeyEvent.KEYCODE_CTRL_LEFT)
+                true
             }
 
             // メインレイアウトにオーバーレイビューを追加
             // SDLSurface (mSurface) の上に重なるようにする
             val params = FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
             )
             mainLayout.addView(ovView, params)
             Log.d("XSystem4Activity", "Overlay controls added.")
@@ -126,6 +135,23 @@ class XSystem4WithPadActivity : SDLActivity() { // SDLActivityを継承
             // 初期状態は表示 (必要に応じて変更)
             setOverlayVisibility(true)
         }
+    }
+
+    private fun handleTouchEvent(event: MotionEvent, keyCode: Int) {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                sendKeyEvent(keyCode, KeyEvent.ACTION_DOWN)
+                Log.d("XSystem4Activity", "Key DOWN: $keyCode")
+            }
+            MotionEvent.ACTION_UP -> {
+                sendKeyEvent(keyCode, KeyEvent.ACTION_UP)
+                Log.d("XSystem4Activity", "Key UP: $keyCode")
+            }
+        }
+    }
+
+    private fun sendKeyEvent(keyCode: Int, action: Int) {
+        dispatchKeyEvent(KeyEvent(action, keyCode))
     }
 
     // オーバーレイの表示・非表示を切り替えるメソッド（例）

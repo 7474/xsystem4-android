@@ -1,51 +1,143 @@
 <!-- res/layout/overlay_controls.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <!-- 左側のコントロール -->
-    <LinearLayout android:id="@+id/left_controls_container" android:layout_width="wrap_content"
-        android:layout_height="match_parent" android:orientation="vertical"
-        android:layout_alignParentStart="true" android:layout_centerVertical="true"
-        android:padding="16dp" android:gravity="center_vertical">
+    <LinearLayout
+        android:id="@+id/left_controls_container"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <!-- ジョイスティックエリア (例: FrameLayout) -->
-        <FrameLayout android:id="@+id/joystick_area" android:layout_width="120dp"
-            android:layout_height="120dp" android:background="#80FF0000" /> <!-- 仮の背景色 -->
+        <FrameLayout
+            android:id="@+id/joystick_area"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:background="#400000FF" /> <!-- 仮の背景色 -->
 
         <!-- 十字キー (D-pad) -->
-        <GridLayout android:id="@+id/dpad_buttons" android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:layout_marginTop="20dp"
-            android:columnCount="3" android:rowCount="3" android:alignmentMode="alignMargins">
+        <GridLayout
+            android:id="@+id/dpad_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:alignmentMode="alignMargins"
+            android:columnCount="3"
+            android:rowCount="3">
 
-            <View android:layout_width="40dp" android:layout_height="40dp" /> <!-- Spacer -->
-            <Button android:id="@+id/dpad_up" android:layout_width="40dp" android:layout_height="40dp" android:text="↑" />
-            <View android:layout_width="40dp" android:layout_height="40dp" /> <!-- Spacer -->
+            <View
+                android:layout_width="40dp"
+                android:layout_height="40dp" /> <!-- Spacer -->
+            <Button
+                android:id="@+id/dpad_up"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="↑" />
 
-            <Button android:id="@+id/dpad_left" android:layout_width="40dp" android:layout_height="40dp" android:text="←" />
-            <View android:layout_width="40dp" android:layout_height="40dp" /> <!-- Center Spacer -->
-            <Button android:id="@+id/dpad_right" android:layout_width="40dp" android:layout_height="40dp" android:text="→" />
+            <View
+                android:layout_width="40dp"
+                android:layout_height="40dp" /> <!-- Spacer -->
 
-            <View android:layout_width="40dp" android:layout_height="40dp" /> <!-- Spacer -->
-            <Button android:id="@+id/dpad_down" android:layout_width="40dp" android:layout_height="40dp" android:text="↓" />
-            <View android:layout_width="40dp" android:layout_height="40dp" /> <!-- Spacer -->
+            <Button
+                android:id="@+id/dpad_left"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="←" />
+
+            <View
+                android:layout_width="40dp"
+                android:layout_height="40dp" /> <!-- Center Spacer -->
+            <Button
+                android:id="@+id/dpad_right"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="→" />
+
+            <View
+                android:layout_width="40dp"
+                android:layout_height="40dp" /> <!-- Spacer -->
+            <Button
+                android:id="@+id/dpad_down"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="↓" />
+
+            <View
+                android:layout_width="40dp"
+                android:layout_height="40dp" /> <!-- Spacer -->
         </GridLayout>
     </LinearLayout>
 
     <!-- 右側のコントロール -->
-    <LinearLayout android:id="@+id/right_controls_container" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:orientation="vertical"
-        android:layout_alignParentEnd="true" android:layout_centerVertical="true"
-        android:padding="16dp" android:gravity="center_vertical">
+    <LinearLayout
+        android:id="@+id/right_controls_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <Button android:id="@+id/button_action_a" android:layout_width="80dp"
-            android:layout_height="80dp" android:text="A" />
+        <GridLayout
+            android:id="@+id/right_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:alignmentMode="alignMargins"
+            android:columnCount="3"
+            android:rowCount="3">
 
-        <Button android:id="@+id/button_action_b" android:layout_width="80dp"
-            android:layout_height="80dp" android:layout_marginTop="10dp" android:text="B" />
+            <View
+                android:layout_width="40dp"
+                android:layout_height="40dp" /> <!-- Spacer -->
 
-        <Button android:id="@+id/button_menu" android:layout_width="80dp"
-            android:layout_height="wrap_content" android:layout_marginTop="20dp"
-            android:text="Menu" />
+            <Button
+                android:id="@+id/button_menu"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="M" />
+
+
+            <View
+                android:layout_width="40dp"
+                android:layout_height="40dp" /> <!-- Spacer -->
+
+            <Button
+                android:id="@+id/button_ctrl"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="C" />
+
+            <View
+                android:layout_width="40dp"
+                android:layout_height="40dp" /> <!-- Center Spacer -->
+            <Button
+                android:id="@+id/button_action_a"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="_" />
+
+            <View
+                android:layout_width="40dp"
+                android:layout_height="40dp" /> <!-- Spacer -->
+
+            <Button
+                android:id="@+id/button_action_b"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="┛" />
+
+            <View
+                android:layout_width="40dp"
+                android:layout_height="40dp" /> <!-- Spacer -->
+        </GridLayout>
     </LinearLayout>
 
 </RelativeLayout>
