@@ -10,10 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.GridLayout
 import org.libsdl.app.SDLActivity
 
 class XSystem4WithPadActivity : SDLActivity() { // SDLActivityを継承
-    //    XSystem4Activity
+    // XSystem4Activity
     companion object {
         const val EXTRA_GAME_ROOT = "GAME_ROOT"
         const val EXTRA_SAVE_DIR = "SAVE_DIR"
@@ -61,28 +62,34 @@ class XSystem4WithPadActivity : SDLActivity() { // SDLActivityを継承
         // UI要素への参照取得とリスナー設定
         overlayControlsView?.let { ovView ->
             // --- 左側のコントロール ---
-            val joystickArea = ovView.findViewById<FrameLayout>(R.id.joystick_area)
-            // ジョイスティックエリアのタッチイベント処理 (例)
-            joystickArea.setOnTouchListener { v, event ->
-                // ジョイスティックのロジックをここに実装
-                // event.x, event.y をネイティブコードに送るなど
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> Log.d(
-                        "XSystem4Activity",
-                        "nativeSendJoystickEvent: x=${event.x}, y=${event.y}, pressed=true"
-                    )
+//            val joystickArea = ovView.findViewById<FrameLayout>(R.id.joystick_area)
+//            // ジョイスティックエリアのタッチイベント処理 (例)
+//            joystickArea.setOnTouchListener { v, event ->
+//                // ジョイスティックのロジックをここに実装
+//                // event.x, event.y をネイティブコードに送るなど
+//                when (event.action) {
+//                    MotionEvent.ACTION_DOWN -> Log.d(
+//                        "XSystem4Activity",
+//                        "nativeSendJoystickEvent: x=${event.x}, y=${event.y}, pressed=true"
+//                    )
+//
+//                    MotionEvent.ACTION_MOVE -> Log.d(
+//                        "XSystem4Activity",
+//                        "nativeSendJoystickEvent: x=${event.x}, y=${event.y}, pressed=true"
+//                    )
+//
+//                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> Log.d(
+//                        "XSystem4Activity", "nativeSendJoystickEvent: x=0f, y=0f, pressed=false"
+//                    ) // リセット
+//                }
+//                true // イベントを消費
+//            }
 
-                    MotionEvent.ACTION_MOVE -> Log.d(
-                        "XSystem4Activity",
-                        "nativeSendJoystickEvent: x=${event.x}, y=${event.y}, pressed=true"
-                    )
-
-                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> Log.d(
-                        "XSystem4Activity", "nativeSendJoystickEvent: x=0f, y=0f, pressed=false"
-                    ) // リセット
-                }
-                true // イベントを消費
-            }
+            // キーエリアの背景タッチを無効化
+            ovView.findViewById<GridLayout>(R.id.dpad_buttons)
+                .setOnTouchListener { _, event -> true }
+            ovView.findViewById<GridLayout>(R.id.right_buttons)
+                .setOnTouchListener { _, event -> true }
 
             // 十字キーボタン
             ovView.findViewById<Button>(R.id.dpad_up).setOnTouchListener { _, event ->
@@ -111,14 +118,14 @@ class XSystem4WithPadActivity : SDLActivity() { // SDLActivityを継承
                 handleTouchEvent(event, KeyEvent.KEYCODE_ENTER)
                 true
             }
-            ovView.findViewById<Button>(R.id.button_menu).setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_UP) {
-                    Log.d("XSystem4Activity", "nativeSendButtonEvent: Menu_pressed")
-                    // 例: メニューボタンが押されたらオーバーレイを非表示にする
-                    // toggleOverlayVisibility()
-                }
-                true
-            }
+//            ovView.findViewById<Button>(R.id.button_menu).setOnTouchListener { _, event ->
+//                if (event.action == MotionEvent.ACTION_UP) {
+//                    Log.d("XSystem4Activity", "nativeSendButtonEvent: Menu_pressed")
+//                    // 例: メニューボタンが押されたらオーバーレイを非表示にする
+//                    // toggleOverlayVisibility()
+//                }
+//                true
+//            }
             ovView.findViewById<Button>(R.id.button_ctrl).setOnTouchListener { _, event ->
                 handleTouchEvent(event, KeyEvent.KEYCODE_CTRL_LEFT)
                 true
@@ -143,6 +150,7 @@ class XSystem4WithPadActivity : SDLActivity() { // SDLActivityを継承
                 sendKeyEvent(keyCode, KeyEvent.ACTION_DOWN)
                 Log.d("XSystem4Activity", "Key DOWN: $keyCode")
             }
+
             MotionEvent.ACTION_UP -> {
                 sendKeyEvent(keyCode, KeyEvent.ACTION_UP)
                 Log.d("XSystem4Activity", "Key UP: $keyCode")
