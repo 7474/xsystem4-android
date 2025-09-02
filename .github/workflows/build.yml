@@ -16,15 +16,6 @@ jobs:
     - name: Install Deps
       run: sudo apt install ninja-build
 
-    - name: Cache Android NDK
-      uses: actions/cache@v4
-      with:
-        path: |
-          ${{ env.ANDROID_NDK_LATEST_HOME }}
-        key: ${{ runner.os }}-android-ndk-${{ env.ANDROID_NDK_LATEST_HOME }}
-        restore-keys: |
-          ${{ runner.os }}-android-ndk-
-
     - name: Cache NDK build
       uses: actions/cache@v4
       with:
