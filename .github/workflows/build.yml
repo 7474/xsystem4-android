@@ -16,6 +16,27 @@ jobs:
     - name: Install Deps
       run: sudo apt install ninja-build
 
+    - name: Cache NDK build
+      uses: actions/cache@v4
+      with:
+        path: |
+          build/
+          xsystem4/subprojects/
+        key: ${{ runner.os }}-ndk-${{ hashFiles('xsystem4/**/*.c', 'xsystem4/**/*.h', 'xsystem4/**/CMakeLists.txt', 'xsystem4/**/meson.build', 'CMakeLists.txt', 'build-shared-libs.sh') }}
+        restore-keys: |
+          ${{ runner.os }}-ndk-
+
+    - name: Cache Gradle
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+          project/.gradle
+        key: ${{ runner.os }}-gradle-${{ hashFiles('project/**/*.gradle*', 'project/**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
     - name: Native Build
       run: ANDROID_NDK_HOME=$ANDROID_NDK_LATEST_HOME ./build-shared-libs.sh
 
@@ -23,11 +44,12 @@ jobs:
       run: |
         cd project
         echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore.jks
-        JAVA_HOME=$JAVA_HOME_17_X64 ./gradlew assembleRelease
+        JAVA_HOME=$JAVA_HOME_17_X64 ./gradlew assembleRelease --parallel --build-cache
       env:
         KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.caching=true
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
